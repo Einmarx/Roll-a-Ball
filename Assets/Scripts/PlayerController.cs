@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour {
 
     private Rigidbody rb;
 
+    bool isGrounded;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -20,14 +22,36 @@ public class PlayerController : MonoBehaviour {
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
-        rb.AddForce(movement * speed);
+        GetComponent<Rigidbody>().AddForce(movement * speed);
 
-        if (Input.GetKeyDown ("space"))
+     
+        
+        
+
+        if (Input.GetKeyDown (KeyCode.Space) && isGrounded)
         {
             Vector3 jump = new Vector3(0.0f, 300.0f, 0.0f);
+
             GetComponent<Rigidbody>().AddForce(jump);
         }
      }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Floor")) ;
+        {
+            isGrounded = true;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Floor")) ;
+        {
+            isGrounded = false;
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag ("Pick Up"))
